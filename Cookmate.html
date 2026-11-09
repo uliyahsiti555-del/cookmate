@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Cookmate</title>
+<style>
+:root{--bg:#FBF3E4;--card:#FFFBF2;--tx:#4A2C1A;--mut:#8A6A55;--ac:#D98A3D;--line:#EAD9BE;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2A1C14;--card:#36251B;--tx:#F6E6D0;--mut:#C4A88E;--ac:#E89C4E;--line:#4D382A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#2A1C14;--card:#36251B;--tx:#F6E6D0;--mut:#C4A88E;--ac:#E89C4E;--line:#4D382A;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:"Nunito","Segoe UI",system-ui,sans-serif}
+body{max-width:640px;margin:0 auto;padding:0 16px 110px}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{margin:0}h2{font-size:18px;margin:20px 0 10px}
+.top{display:flex;align-items:center;gap:10px;padding:14px 0 4px}
+.top b{font-size:22px;color:var(--ac)}
+.sub{color:var(--mut);font-size:14px}
+.search{width:100%;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--tx);font:inherit;margin:10px 0}
+.search:focus{outline:2px solid var(--ac)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px}
+.chip{white-space:nowrap;padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--card)}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer}
+.th{height:104px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative}
+.t-b{background:rgba(217,138,61,.22)}.t-m{background:rgba(232,140,150,.22)}.t-d{background:rgba(90,170,150,.22)}.t-p{background:rgba(210,70,50,.2)}
+.ct{padding:10px 12px}.ct b{display:block;font-size:14px;line-height:1.25}.ct span{font-size:12px;color:var(--mut)}
+.hb{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;border:none;background:var(--card);color:var(--mut);font-size:17px}
+.hb.on{color:#E0524A}
+.hero{background:linear-gradient(135deg,rgba(217,138,61,.3),rgba(217,138,61,.08));border-radius:20px;padding:16px;display:flex;align-items:center;gap:12px;margin-top:8px}
+.hero p{margin:4px 0 0;font-size:14px;color:var(--mut)}
+.row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}.row .card{min-width:150px;width:150px}
+.back{border:none;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 14px;margin:12px 0}
+.dh{height:200px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:104px;position:relative}
+.meta{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}.meta span{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:13px}
+.btn{background:var(--ac);color:#fff;border:none;border-radius:14px;padding:11px 16px;font-weight:700}
+.btn.o{background:transparent;color:var(--ac);border:1.5px solid var(--ac)}
+ul.ing{list-style:none;padding:0;margin:0}ul.ing li{padding:9px 0;border-bottom:1px dashed var(--line);font-size:15px}
+ol.st{padding:0;margin:0;list-style:none;counter-reset:s}
+ol.st li{counter-increment:s;display:flex;gap:12px;padding:12px;margin-bottom:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;cursor:pointer;line-height:1.45}
+ol.st li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+ol.st li.done{opacity:.5;text-decoration:line-through}
+.empty{text-align:center;padding:36px 10px;color:var(--mut)}
+.sl{display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px}
+.sl input{width:20px;height:20px;accent-color:var(--ac)}.sl span{flex:1}.sl.done span{text-decoration:line-through;opacity:.5}
+.sl button{border:none;background:none;color:var(--mut);font-size:18px}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+.nav div{display:flex;width:100%;max-width:640px}
+.nav button{flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--mut);padding:6px 0}
+.nav button i{font-style:normal;font-size:20px}.nav button.on{color:var(--ac);font-weight:800}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:99px;font-size:13px;z-index:9}
+.stat{display:flex;gap:10px}.stat div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}.stat b{font-size:22px;color:var(--ac);display:block}
+.add{display:flex;gap:8px;margin-bottom:12px}.add .search{margin:0}
+</style></head><body>
+<div id="app"></div><div class="nav"><div id="nav"></div></div>
+<script>
+const R=[
+// b = makanan berat
+["b","🍛","Nasi Goreng Kampung",20,"Mudah","Nasi goreng gurih beraroma terasi, ditemani telur mata sapi.","Nasi putih dingin 300 g;Bawang merah 3 siung;Bawang putih 2 siung;Cabai rawit 3 buah;Terasi bakar 1/2 sdt;Kecap manis 2 sdm;Telur 2 butir;Minyak 3 sdm","Haluskan bawang, cabai, dan terasi.;Tumis bumbu halus hingga harum.;Masukkan nasi dan kecap, aduk dengan api besar 3 menit.;Goreng telur mata sapi lalu sajikan bersama nasi."],
+["b","🍗","Ayam Goreng Lengkuas",50,"Sedang","Ayam empuk berbumbu kuning dengan serundeng lengkuas gurih.","Ayam potong 500 g;Lengkuas parut 5 sdm;Bawang putih 4 siung;Kunyit 2 cm;Ketumbar 1 sdt;Garam 1 sdt;Air 400 ml;Minyak 300 ml","Haluskan bawang putih, kunyit, ketumbar.;Ungkep ayam dengan bumbu halus, garam, dan air hingga meresap.;Goreng ayam hingga kecokelatan.;Sangrai lengkuas parut, taburkan di atas ayam."],
+["b","🍲","Soto Ayam Kuning",55,"Sedang","Kuah kuning hangat segar dengan suwiran ayam dan telur.","Ayam 400 g;Air 1,5 liter;Bawang putih 4 siung;Kunyit 3 cm;Jahe 2 cm;Serai 2 batang;Soun 50 g;Telur rebus 2 butir;Jeruk nipis 1 buah","Rebus ayam hingga matang, suwir dagingnya.;Tumis bumbu halus dan serai, masukkan ke kuah kaldu.;Didihkan 15 menit, koreksi rasa.;Tata soun, ayam, telur, siram kuah, beri perasan jeruk nipis."],
+["b","🥗","Gado-Gado",35,"Mudah","Sayur rebus segar dengan saus kacang manis gurih.","Kentang 2 buah;Kol 100 g;Kacang panjang 100 g;Tauge 100 g;Tahu goreng 4 potong;Kacang tanah goreng 100 g;Gula merah 2 sdm;Cabai 3 buah;Air 150 ml","Rebus semua sayur secukupnya, tiriskan.;Haluskan kacang, cabai, gula merah, garam.;Encerkan sambal kacang dengan air hangat.;Tata sayur dan tahu, siram saus kacang."],
+["b","🍜","Mie Goreng Jawa",25,"Mudah","Mie kenyal berbumbu kecap, tumis sawi dan telur.","Mie telur 200 g;Telur 1 butir;Sawi hijau 100 g;Bawang putih 3 siung;Bawang merah 3 siung;Kecap manis 3 sdm;Saus tiram 1 sdm;Minyak 2 sdm","Rebus mie setengah matang, tiriskan.;Tumis bawang, orak-arik telur.;Masukkan sawi, mie, kecap, dan saus tiram.;Aduk rata hingga bumbu meresap."],
+["b","🍚","Nasi Uduk",45,"Sedang","Nasi gurih santan dengan daun salam dan serai.","Beras 300 g;Santan 400 ml;Daun salam 2 lembar;Serai 1 batang;Bawang merah goreng 2 sdm;Garam 1 sdt","Cuci beras, tiriskan.;Masak beras dengan santan, salam, serai, dan garam hingga air menyusut.;Kukus 20 menit hingga pulen.;Taburi bawang goreng, sajikan dengan lauk."],
+["b","🍱","Ayam Teriyaki",30,"Mudah","Ayam mengilap manis gurih ala Jepang.","Paha ayam fillet 300 g;Kecap asin 3 sdm;Mirin atau madu 2 sdm;Gula 1 sdm;Jahe parut 1 sdt;Bawang putih 2 siung;Wijen 1 sdt","Campur kecap, madu, gula, jahe sebagai saus.;Panggang ayam di wajan hingga kecokelatan.;Tuang saus, masak hingga mengental dan mengilap.;Taburi wijen, sajikan dengan nasi."],
+["b","🍝","Spaghetti Carbonara",25,"Sedang","Pasta creamy dengan telur, keju, dan smoked beef.","Spaghetti 200 g;Smoked beef 4 lembar;Kuning telur 2 butir;Keju parut 50 g;Bawang putih 2 siung;Lada hitam 1/2 sdt;Garam 1 sdt","Rebus spaghetti al dente, sisakan 100 ml air rebusan.;Tumis bawang putih dan smoked beef.;Matikan api, masukkan pasta, kocokan telur dan keju.;Tambahkan air rebusan hingga creamy, beri lada."],
+["b","🥘","Capcay Kuah",25,"Mudah","Aneka sayur segar dalam kuah bening gurih.","Wortel 1 buah;Brokoli 100 g;Kembang kol 100 g;Sawi putih 100 g;Bakso 5 butir;Bawang putih 3 siung;Saus tiram 1 sdm;Air 300 ml","Tumis bawang putih hingga harum.;Masukkan wortel, bakso, dan air, masak 5 menit.;Tambahkan sayur lainnya dan saus tiram.;Masak 3 menit agar sayur tetap renyah."],
+["b","🥣","Sayur Asem",35,"Mudah","Sayur kuah asam segar khas Betawi.","Jagung manis 1 buah;Kacang panjang 100 g;Labu siam 1 buah;Melinjo 50 g;Asam jawa 1 sdm;Gula merah 1 sdm;Bawang merah 4 siung;Air 1 liter","Didihkan air dengan bumbu halus dan asam jawa.;Masukkan jagung, melinjo, dan labu siam.;Tambahkan kacang panjang, gula merah, garam.;Masak hingga sayur empuk."],
+["b","🍗","Opor Ayam",60,"Sedang","Ayam santan lembut bercita rasa rempah hangat.","Ayam 600 g;Santan 500 ml;Bawang merah 6 siung;Bawang putih 3 siung;Kemiri 3 butir;Ketumbar 1 sdt;Serai 2 batang;Daun salam 2 lembar","Haluskan bawang, kemiri, ketumbar.;Tumis bumbu dan serai hingga harum.;Masukkan ayam, aduk, tuang santan.;Masak api kecil 35 menit hingga ayam empuk."],
+["b","🍜","Bakso Kuah",50,"Sedang","Bakso sapi kenyal dengan kuah kaldu bening.","Daging giling 300 g;Tepung tapioka 80 g;Bawang putih 3 siung;Es batu 4 keping;Air 1 liter;Mie kuning 100 g;Seledri 1 batang;Bawang goreng 2 sdm","Haluskan daging, bawang, es batu, tapioka, garam.;Bentuk bulatan, rebus hingga mengapung.;Buat kuah kaldu dari air rebusan bakso, beri garam.;Sajikan bakso dengan mie, seledri, dan bawang goreng."],
+["b","🍚","Nasi Tim Ayam",40,"Mudah","Nasi lembut hangat dengan ayam jamur, cocok untuk semua usia.","Beras 150 g;Dada ayam cincang 150 g;Jamur kancing 4 buah;Bawang putih 2 siung;Jahe 1 cm;Kecap asin 1 sdm;Air 400 ml","Masak beras dengan air hingga menjadi nasi lunak.;Tumis ayam, jamur, bawang putih, jahe.;Tata nasi dan ayam di mangkuk tahan panas.;Kukus 15 menit, siram sedikit kecap."],
+["b","🐟","Ikan Bakar Kecap",40,"Sedang","Ikan bakar manis gurih dengan olesan kecap bawang.","Ikan kakap atau nila 2 ekor;Kecap manis 4 sdm;Bawang putih 3 siung;Jeruk nipis 1 buah;Margarin 1 sdm;Garam 1 sdt","Lumuri ikan dengan jeruk nipis dan garam, diamkan 10 menit.;Campur kecap, bawang putih halus, margarin.;Panggang ikan sambil diolesi bumbu.;Bakar hingga matang dan sedikit gosong di tepi."],
+// m = camilan manis
+["m","🍮","Puding Karamel",60,"Sedang","Puding lembut dengan saus karamel manis legit.","Susu cair 500 ml;Telur 3 butir;Gula pasir 100 g;Vanili 1 sdt;Air 2 sdm","Lelehkan 50 g gula jadi karamel, tuang ke cetakan.;Kocok telur, sisa gula, susu hangat, vanili, saring.;Tuang ke cetakan, kukus 30 menit api kecil.;Dinginkan di kulkas 2 jam lalu balik."],
+["m","🍌","Pisang Goreng Madu",25,"Mudah","Pisang goreng renyah disiram madu hangat.","Pisang kepok 6 buah;Tepung terigu 100 g;Tepung beras 2 sdm;Air 120 ml;Garam 1/4 sdt;Madu 3 sdm;Minyak 300 ml","Campur tepung, garam, dan air jadi adonan.;Celup pisang ke adonan.;Goreng hingga keemasan.;Tiriskan, siram madu."],
+["m","🟢","Klepon",40,"Sedang","Bola ketan hijau isi gula merah dibalut kelapa.","Tepung ketan 200 g;Air pandan 150 ml;Gula merah sisir 80 g;Kelapa parut 100 g;Garam 1/2 sdt","Campur tepung ketan dan air pandan, uleni.;Isi gula merah, bulatkan.;Rebus hingga mengapung.;Gulingkan di kelapa parut kukus bergaram."],
+["m","🍫","Brownies Kukus",50,"Mudah","Brownies cokelat lembut tanpa oven.","Cokelat masak 100 g;Margarin 100 g;Telur 3 butir;Gula 100 g;Tepung terigu 80 g;Cokelat bubuk 20 g","Lelehkan cokelat dan margarin.;Kocok telur dan gula hingga mengembang.;Masukkan lelehan cokelat, tepung, cokelat bubuk.;Kukus dalam loyang 30 menit."],
+["m","🍩","Donat Kentang",90,"Sedang","Donat super empuk dengan taburan gula halus.","Kentang kukus 100 g;Tepung protein tinggi 300 g;Ragi instan 1 sdt;Susu 130 ml;Gula 40 g;Telur 1 butir;Mentega 40 g;Minyak 500 ml","Campur semua bahan, uleni kalis.;Diamkan 45 menit hingga mengembang.;Bentuk donat, istirahatkan 20 menit.;Goreng api kecil, taburi gula halus."],
+["m","🥮","Kue Lumpur",40,"Mudah","Kue lembut gurih manis beraroma santan dan kentang.","Kentang kukus 250 g;Santan 250 ml;Telur 2 butir;Gula 100 g;Tepung terigu 3 sdm;Kismis 2 sdm","Haluskan kentang, campur telur, gula, santan.;Masukkan tepung dan aduk rata.;Tuang ke cetakan panas, beri kismis.;Masak api kecil tertutup hingga matang."],
+["m","🌯","Dadar Gulung",45,"Sedang","Kulit hijau tipis berisi kelapa gula merah.","Tepung terigu 150 g;Air pandan 250 ml;Telur 1 butir;Kelapa parut 150 g;Gula merah 100 g;Air 50 ml","Kocok tepung, telur, air pandan hingga halus.;Masak isi kelapa dan gula merah hingga kering.;Dadar adonan tipis di teflon.;Isi dan gulung."],
+["m","🥞","Pancake Fluffy",25,"Mudah","Pancake tebal empuk dengan madu dan mentega.","Tepung terigu 150 g;Baking powder 1 sdt;Gula 2 sdm;Susu 150 ml;Telur 1 butir;Mentega leleh 2 sdm","Campur bahan kering.;Kocok susu, telur, mentega, campurkan perlahan.;Tuang di teflon panas, balik saat bergelembung.;Sajikan dengan madu."],
+["m","🍰","Martabak Manis Mini",45,"Sedang","Martabak tebal sarang tawon isi cokelat keju.","Tepung terigu 200 g;Gula 2 sdm;Ragi 1/2 sdt;Soda kue 1/4 sdt;Telur 1 butir;Air 250 ml;Cokelat meses 3 sdm;Keju parut 3 sdm","Campur bahan adonan, diamkan 30 menit.;Tuang di teflon kecil tertutup api kecil.;Saat berlubang, taburi meses dan keju.;Lipat, olesi mentega, potong."],
+["m","🍡","Onde-Onde",60,"Sedang","Bola wijen renyah dengan isi kacang hijau manis.","Tepung ketan 200 g;Kentang kukus 50 g;Gula 50 g;Air 120 ml;Kacang hijau kupas 100 g;Wijen 100 g;Minyak 400 ml","Kukus dan haluskan kacang hijau dengan gula jadi isian.;Buat adonan ketan, kentang, gula, air.;Bulatkan, isi, gulingkan di wijen.;Goreng hingga mengapung dan keemasan."],
+["m","🧁","Kue Cubit",25,"Mudah","Kue mungil lembut setengah matang dengan cokelat.","Tepung terigu 100 g;Telur 2 butir;Gula 50 g;Susu cair 100 ml;Mentega leleh 30 g;Meses cokelat 3 sdm","Kocok telur dan gula hingga pucat.;Masukkan tepung, susu, mentega.;Tuang ke cetakan kue cubit panas.;Taburi meses, tutup hingga matang."],
+["m","🍞","Roti Bakar Cokelat Keju",10,"Mudah","Roti bakar renyah isi cokelat dan keju leleh.","Roti tawar 4 lembar;Mentega 2 sdm;Selai cokelat 3 sdm;Keju cheddar parut 4 sdm;Susu kental manis 1 sdm","Olesi roti dengan mentega.;Panggang sisi mentega hingga kecokelatan.;Oles cokelat, taburi keju, tutup roti.;Panggang kedua sisi, siram susu kental manis."],
+["m","🍪","Choco Chip Cookies",35,"Mudah","Kukis renyah di tepi, lembut di tengah.","Tepung terigu 200 g;Mentega 100 g;Gula cokelat 80 g;Telur 1 butir;Choco chip 100 g;Baking soda 1/2 sdt","Kocok mentega dan gula hingga lembut.;Tambahkan telur, lalu tepung dan baking soda.;Masukkan choco chip, bentuk bulat.;Panggang 180°C selama 12 menit."],
+["m","🥣","Bubur Sumsum",30,"Mudah","Bubur putih lembut dengan kuah gula merah.","Tepung beras 50 g;Santan 500 ml;Garam 1/2 sdt;Daun pandan 1 lembar;Gula merah 100 g;Air 100 ml","Larutkan tepung beras dengan sedikit santan.;Masak sisa santan, pandan, garam, masukkan larutan, aduk hingga kental.;Rebus gula merah dengan air jadi kuah.;Sajikan bubur disiram kuah gula merah."],
+["m","🍌","Pisang Cokelat Lumer",20,"Mudah","Kulit lumpia renyah berisi pisang dan cokelat lumer.","Pisang 4 buah;Kulit lumpia 8 lembar;Cokelat batang 80 g;Keju parut 3 sdm;Minyak 300 ml","Potong pisang, letakkan di kulit lumpia.;Tambah cokelat batang dan keju.;Gulung rapat, rekatkan dengan air.;Goreng hingga keemasan."],
+// d = minuman
+["d","🍋","Es Teh Lemon",10,"Mudah","Teh dingin menyegarkan dengan irisan lemon.","Teh celup 2 kantong;Air panas 300 ml;Gula 2 sdm;Lemon 1/2 buah;Es batu secukupnya","Seduh teh dalam air panas 3 menit.;Larutkan gula.;Tuang ke gelas berisi es batu.;Beri perasan dan irisan lemon."],
+["d","☕","Es Kopi Susu Gula Aren",5,"Mudah","Kopi susu kekinian dengan manis gula aren.","Espresso atau kopi kental 60 ml;Susu cair 150 ml;Sirup gula aren 2 sdm;Es batu secukupnya","Masukkan sirup gula aren ke gelas.;Tambah es batu dan susu.;Tuang kopi perlahan.;Aduk sebelum diminum."],
+["d","🍵","Matcha Latte",8,"Mudah","Latte matcha creamy dengan rasa teh hijau lembut.","Bubuk matcha 2 sdt;Air panas 50 ml;Susu cair 200 ml;Madu 1 sdm;Es batu secukupnya","Aduk matcha dengan air panas hingga halus.;Tambahkan madu.;Tuang susu dan es batu ke gelas.;Tuang matcha di atasnya."],
+["d","☕","Cokelat Panas",10,"Mudah","Cokelat hangat kental yang nyaman di hari hujan.","Susu cair 250 ml;Cokelat bubuk 2 sdm;Gula 1 sdm;Cokelat batang 20 g;Marshmallow 3 buah","Hangatkan susu dengan api kecil.;Masukkan cokelat bubuk, gula, dan cokelat batang.;Aduk hingga larut dan kental.;Tuang ke cangkir, beri marshmallow."],
+["d","🫚","Wedang Jahe",15,"Mudah","Minuman jahe hangat penghangat badan.","Jahe 4 cm;Serai 1 batang;Gula merah 2 sdm;Air 500 ml;Cengkeh 2 butir","Memarkan jahe dan serai.;Rebus bersama air, cengkeh, gula merah 10 menit.;Saring.;Sajikan hangat."],
+["d","🍧","Es Cendol",25,"Sedang","Cendol hijau kenyal dengan santan dan gula aren.","Tepung beras 50 g;Tepung hunkwe 2 sdm;Air pandan 400 ml;Santan 200 ml;Gula aren 100 g;Es serut secukupnya","Masak tepung dengan air pandan hingga kental.;Cetak cendol ke air es.;Rebus gula aren jadi sirup.;Susun cendol, es, santan, dan sirup."],
+["d","🥑","Jus Alpukat",8,"Mudah","Jus alpukat creamy dengan cokelat susu.","Alpukat matang 1 buah;Susu cair 150 ml;Gula 1 sdm;Es batu 5 buah;Susu kental cokelat 1 sdm","Belah alpukat, ambil dagingnya.;Blender dengan susu, gula, dan es.;Tuang ke gelas.;Siram susu kental cokelat."],
+["d","🥭","Smoothie Mangga",8,"Mudah","Smoothie mangga manis segar dengan yoghurt.","Mangga matang 1 buah;Yoghurt plain 100 g;Susu cair 100 ml;Madu 1 sdm;Es batu 4 buah","Potong dadu mangga.;Masukkan semua bahan ke blender.;Blender hingga halus.;Sajikan segera."],
+["d","🥛","Teh Tarik",12,"Mudah","Teh susu berbusa khas Malaysia.","Teh hitam 2 sdm;Air 300 ml;Susu kental manis 3 sdm;Susu evaporasi 50 ml","Seduh teh pekat 5 menit, saring.;Tambahkan susu kental manis dan evaporasi.;Tarik dari satu gelas ke gelas lain berulang kali.;Sajikan hangat berbusa."],
+["d","🧋","Boba Milk Tea",30,"Sedang","Susu teh dengan mutiara tapioka kenyal.","Mutiara tapioka 50 g;Teh hitam 2 kantong;Susu cair 150 ml;Gula cokelat 3 sdm;Air 500 ml;Es batu secukupnya","Rebus boba 15 menit, diamkan 10 menit tertutup.;Rendam boba dalam gula cokelat cair.;Seduh teh, campur susu dan es.;Tuang di atas boba."],
+["d","🥤","Lemon Mint Soda",7,"Mudah","Soda segar dengan lemon dan daun mint.","Lemon 1 buah;Daun mint 8 lembar;Gula 2 sdm;Air soda 250 ml;Es batu secukupnya","Remas mint dengan gula dan perasan lemon di gelas.;Tambahkan es batu.;Tuang air soda perlahan.;Aduk pelan."],
+["d","🥥","Es Kelapa Muda",10,"Mudah","Kelapa muda segar dengan sirup dan es batu.","Kelapa muda 1 butir;Air kelapa 200 ml;Sirup 2 sdm;Jeruk nipis 1/2 buah;Es batu secukupnya","Kerok daging kelapa muda.;Masukkan ke gelas bersama air kelapa dan es.;Tambahkan sirup.;Beri perasan jeruk nipis."],
+["d","🍵","Bandrek",25,"Mudah","Minuman rempah hangat khas Sunda.","Jahe 4 cm;Gula merah 80 g;Kayu manis 1 batang;Cengkeh 3 butir;Serai 1 batang;Air 600 ml;Susu kental manis 1 sdm","Bakar jahe sebentar lalu memarkan.;Rebus semua bahan 15 menit.;Saring ke gelas.;Tambahkan susu jika suka."],
+["d","🍓","Strawberry Milk",6,"Mudah","Susu stroberi pink yang manis dan lembut.","Stroberi 6 buah;Gula 1 sdm;Susu cair 250 ml;Es batu secukupnya","Remas stroberi dengan gula hingga berair.;Masukkan ke gelas dengan es.;Tuang susu dingin.;Aduk dan sajikan."],
+["d","🥒","Es Timun Serut",10,"Mudah","Es timun serut dengan sirup dan jeruk nipis.","Timun 1 buah;Sirup 3 sdm;Jeruk nipis 1/2 buah;Biji selasih 1 sdm;Es serut secukupnya","Serut timun memanjang.;Rendam biji selasih dalam air.;Campur timun, selasih, sirup, es.;Beri perasan jeruk nipis."],
+// p = camilan pedas
+["p","🍢","Basreng Pedas",30,"Mudah","Bakso goreng renyah dengan bumbu cabai daun jeruk.","Bakso ikan 250 g;Cabai bubuk 2 sdm;Daun jeruk 6 lembar;Bawang putih bubuk 1 sdt;Garam 1 sdt;Minyak 400 ml","Iris tipis bakso.;Goreng hingga kering dan renyah.;Goreng daun jeruk sebentar.;Kocok dengan cabai bubuk, bawang putih bubuk, garam."],
+["p","🍜","Seblak Kerupuk",20,"Mudah","Kerupuk basah pedas gurih kencur khas Bandung.","Kerupuk mentah 50 g;Telur 1 butir;Bawang putih 3 siung;Kencur 2 cm;Cabai rawit 8 buah;Kaldu 300 ml;Sawi 50 g","Rendam kerupuk dalam air.;Tumis bumbu halus, orak-arik telur.;Tuang kaldu, masukkan kerupuk dan sawi.;Masak hingga kuah menyusut."],
+["p","🟤","Cilok Bumbu Pedas",40,"Sedang","Bola tapioka kenyal dengan saus kacang pedas.","Tepung tapioka 200 g;Tepung terigu 2 sdm;Air panas 150 ml;Bawang putih 2 siung;Kacang tanah 80 g;Cabai rawit 6 buah;Kecap 1 sdm","Campur tapioka dan terigu, siram air panas, uleni.;Bulatkan, rebus hingga mengapung.;Haluskan kacang, cabai, bawang putih jadi saus.;Siram saus dan kecap di atas cilok."],
+["p","🥚","Telur Balado",20,"Mudah","Telur rebus goreng dalam bumbu balado merah menggoda.","Telur 4 butir;Cabai merah 8 buah;Cabai rawit 4 buah;Bawang merah 4 siung;Tomat 1 buah;Jeruk nipis 1/2 buah","Rebus telur, kupas, goreng sebentar.;Haluskan cabai, bawang, tomat; tumis hingga matang.;Masukkan telur.;Aduk, beri perasan jeruk nipis."],
+["p","🧈","Tahu Crispy Cabai Garam",25,"Mudah","Tahu garing berbalut cabai, bawang putih, dan garam.","Tahu putih 6 potong;Tepung maizena 5 sdm;Cabai merah 3 buah;Bawang putih 4 siung;Daun bawang 1 batang;Minyak 300 ml","Potong dadu tahu, lumuri maizena.;Goreng hingga garing.;Tumis cabai, bawang putih, daun bawang dengan garam.;Campur tahu ke tumisan."],
+["p","🌶️","Usus Crispy Pedas",45,"Sedang","Usus ayam garing gurih dengan bubuk cabai.","Usus ayam bersih 250 g;Tepung bumbu 100 g;Air 60 ml;Cabai bubuk 2 sdm;Garam 1 sdt;Minyak 400 ml","Rebus usus hingga empuk.;Lumuri tepung basah lalu tepung kering.;Goreng hingga garing.;Taburi bubuk cabai dan garam."],
+["p","🍟","Kentang Goreng Pedas",25,"Mudah","Kentang goreng renyah dengan bumbu pedas barbeque.","Kentang 3 buah;Cabai bubuk 2 sdt;Paprika bubuk 1 sdt;Bawang putih bubuk 1 sdt;Garam 1 sdt;Minyak 400 ml","Potong kentang batang, rendam air, tiriskan.;Goreng hingga keemasan.;Campur semua bumbu bubuk.;Kocok kentang panas bersama bumbu."],
+["p","🥟","Pangsit Goreng Sambal",30,"Mudah","Pangsit isi ayam renyah dengan sambal manis pedas.","Kulit pangsit 20 lembar;Ayam cincang 150 g;Bawang putih 2 siung;Daun bawang 1 batang;Cabai rawit 5 buah;Gula 1 sdt;Cuka 1 sdm","Campur ayam, bawang putih, daun bawang, garam.;Isi kulit pangsit, lipat.;Goreng hingga keemasan.;Haluskan cabai, gula, cuka, garam jadi sambal."],
+["p","🫓","Mendoan Sambal Kecap",25,"Mudah","Tempe tipis setengah matang dengan sambal kecap pedas.","Tempe tipis 8 lembar;Tepung terigu 100 g;Daun bawang 2 batang;Air 150 ml;Cabai rawit 6 buah;Kecap manis 3 sdm;Bawang merah 2 siung","Campur tepung, daun bawang, bawang putih, air.;Celup tempe, goreng sebentar hingga lunak.;Iris cabai dan bawang merah, campur kecap.;Sajikan tempe dengan sambal."],
+["p","🟡","Cireng Rujak",35,"Mudah","Cireng garing dengan bumbu rujak pedas manis.","Tepung tapioka 200 g;Tepung terigu 2 sdm;Daun bawang 1 batang;Air panas 150 ml;Gula merah 50 g;Cabai rawit 5 buah;Asam jawa 1 sdm","Campur tapioka, daun bawang, air panas, uleni.;Bentuk pipih, goreng garing.;Haluskan cabai, gula merah, asam jawa, air sedikit.;Sajikan cireng dengan sambal rujak."],
+["p","🍄","Jamur Crispy Pedas",25,"Mudah","Jamur tiram renyah dengan taburan bubuk cabai.","Jamur tiram 200 g;Tepung bumbu 100 g;Air es 80 ml;Cabai bubuk 2 sdm;Bawang putih bubuk 1 sdt;Garam 1 sdt;Minyak 400 ml","Suwir jamur, tiriskan.;Celup tepung basah lalu tepung kering.;Goreng hingga garing.;Kocok dengan bubuk cabai dan garam."],
+["p","🍠","Keripik Singkong Balado",40,"Sedang","Keripik singkong renyah berbalut balado manis pedas.","Singkong 500 g;Cabai merah 10 buah;Cabai rawit 5 buah;Bawang putih 4 siung;Gula 3 sdm;Jeruk nipis 1 buah;Minyak 500 ml","Iris tipis singkong, goreng hingga garing.;Haluskan cabai dan bawang, tumis dengan gula.;Masak hingga kental dan minyak keluar.;Campur keripik dengan balado, beri jeruk nipis."],
+["p","🍢","Tteokbokki Pedas",25,"Mudah","Kue beras kenyal dalam saus gochujang pedas manis.","Tteok atau kue beras 200 g;Gochujang 2 sdm;Gula 1 sdm;Kecap asin 1 sdm;Bawang putih 2 siung;Air 250 ml;Daun bawang 1 batang","Rendam tteok dalam air hangat.;Campur gochujang, gula, kecap, bawang putih, air; didihkan.;Masukkan tteok, masak hingga kental.;Taburi daun bawang."],
+["p","🍡","Pentol Pedas",30,"Mudah","Pentol bakso goreng dengan saus pedas pinggir jalan.","Pentol bakso 200 g;Cabai rawit 10 buah;Bawang putih 2 siung;Cuka 1 sdm;Gula 1 sdt;Saus tomat 2 sdm;Minyak 300 ml","Goreng pentol hingga bagian luar garing.;Haluskan cabai, bawang putih, garam.;Campur sambal dengan cuka, gula, saus tomat.;Siram sambal ke pentol hangat."]
+];
+const CAT={b:"Makanan Berat",m:"Camilan Manis",d:"Minuman",p:"Camilan Pedas"};
+const TABS=[["home","🏠","Beranda"],["explore","🔍","Jelajahi"],["saved","❤️","Tersimpan"],["shop","🛒","Belanja"],["me","👤","Profil"]];
+const S={tab:"home",cat:"all",q:"",lvl:"all",open:null};
+let fav=[],shop=[],name="";
+function ld(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+fav=ld("cm_fav",[]);shop=ld("cm_shop",[]);name=ld("cm_name","");
+const $=s=>document.getElementById(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function mascot(sz){return `<svg width="${sz}" height="${sz}" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="50" cy="90" rx="34" ry="6" fill="#D98A3D" opacity=".25"/><path d="M22 78 Q18 48 30 40 L70 40 Q82 48 78 78 Q50 88 22 78Z" fill="#F7D98A"/><path d="M26 42 Q24 22 50 20 Q76 22 74 42 Q62 50 50 44 Q38 50 26 42Z" fill="#B8651F"/><circle cx="40" cy="62" r="4" fill="#4A2C1A"/><circle cx="60" cy="62" r="4" fill="#4A2C1A"/><circle cx="33" cy="70" r="5" fill="#F4A7A0" opacity=".7"/><circle cx="67" cy="70" r="5" fill="#F4A7A0" opacity=".7"/><path d="M45 69 Q50 74 55 69" stroke="#4A2C1A" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`}
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+function card(i){const r=R[i];return `<div class="card" onclick="openR(${i})"><div class="th t-${r[0]}">${r[1]}<button class="hb ${fav.includes(i)?"on":""}" aria-label="Favorit" onclick="event.stopPropagation();tf(${i})">♥</button></div><div class="ct"><b>${esc(r[2])}</b><span>⏱ ${r[3]} mnt · ${r[4]}</span></div></div>`}
+function list(ids){return ids.length?`<div class="grid">${ids.map(card).join("")}</div>`:`<div class="empty">Resep tidak ditemukan 🍮</div>`}
+function filt(){const q=S.q.toLowerCase().trim();return R.map((r,i)=>i).filter(i=>{const r=R[i];return(S.cat==="all"||r[0]===S.cat)&&(S.lvl==="all"||r[4]===S.lvl)&&(!q||(r[2]+" "+r[6]).toLowerCase().includes(q))})}
+function chips(){return `<div class="chips">${[["all","Semua"],...Object.entries(CAT)].map(([k,v])=>`<button class="chip ${S.cat===k?"on":""}" onclick="S.cat='${k}';render()">${v}</button>`).join("")}</div>`}
+function tf(i){const x=fav.indexOf(i);x>=0?fav.splice(x,1):fav.push(i);sv("cm_fav",fav);toast(x>=0?"Dihapus dari favorit":"Disimpan ke favorit ❤️");render()}
+function openR(i){S.open=i;render();window.scrollTo(0,0)}
+function go(t){S.tab=t;S.open=null;render();window.scrollTo(0,0)}
+function addShop(i){const have=shop.map(s=>s.t);let n=0;R[i][6].split(";").forEach(t=>{if(!have.includes(t)){shop.push({t,done:false});n++}});sv("cm_shop",shop);toast(n?n+" bahan ditambahkan 🛒":"Semua bahan sudah ada di daftar")}
+function detail(i){const r=R[i];return `<button class="back" onclick="S.open=null;render()">← Kembali</button>
+<div class="dh t-${r[0]}">${r[1]}<button class="hb" style="width:42px;height:42px;font-size:21px;${fav.includes(i)?"color:#E0524A":""}" onclick="tf(${i})">♥</button></div>
+<h1 style="margin-top:14px;font-size:24px">${esc(r[2])}</h1><p class="sub" style="margin:6px 0">${esc(r[5])}</p>
+<div class="meta"><span>⏱ ${r[3]} menit</span><span>📊 ${r[4]}</span><span>🏷 ${CAT[r[0]]}</span></div>
+<h2>Bahan-bahan</h2><ul class="ing">${r[6].split(";").map(x=>`<li>• ${esc(x)}</li>`).join("")}</ul>
+<button class="btn" style="margin-top:12px" onclick="addShop(${i})">🛒 Tambah ke Daftar Belanja</button>
+<h2>Langkah memasak</h2><p class="sub" style="margin:-6px 0 10px">Ketuk langkah untuk menandai selesai.</p>
+<ol class="st">${r[7].split(";").map(x=>`<li onclick="this.classList.toggle('done')">${esc(x)}</li>`).join("")}</ol>`}
+function home(){const all=R.map((r,i)=>i);const pop=[0,14,29,44,3,16,31,46];const quick=all.filter(i=>R[i][3]<=15).slice(0,8);
+return `<div class="top">${mascot(44)}<b>Cookmate</b></div>
+<div class="hero">${mascot(64)}<div><h3>Halo${name?", "+esc(name):""}! 🍮</h3><p>Mau masak apa hari ini?</p></div></div>
+<input class="search" placeholder="Cari resep atau bahan…" onfocus="S.q='';go('explore');setTimeout(()=>document.getElementById('sq')&&document.getElementById('sq').focus(),50)" readonly>
+<h2>Kategori</h2>${chips().replace(/S\.cat='(\w+)';render\(\)/g,"S.cat='$1';go('explore')")}
+<h2>Populer</h2><div class="row">${pop.map(card).join("")}</div>
+<h2>Cepat saji ≤ 15 menit</h2><div class="row">${quick.map(card).join("")}</div>`}
+function explore(){const ids=filt();return `<h2 style="margin-top:16px">Jelajahi Resep</h2>
+<input id="sq" class="search" placeholder="Cari nama atau bahan…" value="${esc(S.q)}" oninput="S.q=this.value;upd()">
+${chips()}<div class="chips">${["all","Mudah","Sedang"].map(l=>`<button class="chip ${S.lvl===l?"on":""}" onclick="S.lvl='${l}';render()">${l==="all"?"Semua tingkat":l}</button>`).join("")}</div>
+<p class="sub" id="cnt">${ids.length} resep</p><div id="res">${list(ids)}</div>`}
+function upd(){const ids=filt();$("cnt").textContent=ids.length+" resep";$("res").innerHTML=list(ids)}
+function saved(){return `<h2 style="margin-top:16px">Resep Tersimpan</h2>`+(fav.length?list(fav):`<div class="empty">${mascot(80)}<p>Belum ada resep favorit.<br>Ketuk ♥ pada resep untuk menyimpannya.</p><button class="btn" onclick="go('explore')">Jelajahi resep</button></div>`)}
+function shopv(){return `<h2 style="margin-top:16px">Daftar Belanja</h2>
+<div class="add"><input id="ni" class="search" placeholder="Tambah item, mis. Telur 6 butir" onkeydown="if(event.key==='Enter')addItem()"><button class="btn" onclick="addItem()">+</button></div>`+
+(shop.length?shop.map((s,i)=>`<div class="sl ${s.done?"done":""}"><input type="checkbox" ${s.done?"checked":""} onchange="shop[${i}].done=this.checked;sv('cm_shop',shop);render()"><span>${esc(s.t)}</span><button aria-label="Hapus" onclick="shop.splice(${i},1);sv('cm_shop',shop);render()">✕</button></div>`).join("")+`<button class="btn o" onclick="shop=shop.filter(s=>!s.done);sv('cm_shop',shop);render()">Hapus yang sudah dibeli</button>`:`<div class="empty">${mascot(80)}<p>Daftar belanja kosong.<br>Buka resep lalu ketuk “Tambah ke Daftar Belanja”.</p></div>`)}
+function addItem(){const v=$("ni").value.trim();if(!v)return;shop.push({t:v,done:false});sv("cm_shop",shop);render()}
+function me(){return `<div style="text-align:center;padding-top:20px">${mascot(96)}<h2 style="margin:6px 0">${name?esc(name):"Teman Cookmate"}</h2></div>
+<div class="stat"><div><b>${fav.length}</b>Favorit</div><div><b>${shop.filter(s=>!s.done).length}</b>Belanja</div><div><b>${R.length}</b>Resep</div></div>
+<h2>Nama panggilan</h2><div class="add"><input id="nm" class="search" placeholder="Nama kamu" value="${esc(name)}"><button class="btn" onclick="name=$('nm').value.trim();sv('cm_name',name);toast('Tersimpan');render()">Simpan</button></div>
+<h2>Data</h2><button class="btn o" onclick="if(confirm('Hapus semua favorit dan daftar belanja?')){fav=[];shop=[];sv('cm_fav',fav);sv('cm_shop',shop);render()}">Reset favorit &amp; belanja</button>
+<p class="sub" style="margin-top:18px">Cookmate · ${R.length} resep: 15 makanan berat, 15 camilan manis, 15 minuman, 15 camilan pedas. Data disimpan di perangkat ini.</p>`}
+function render(){const v=S.open!==null?detail(S.open):{home,explore,saved,shop:shopv,me}[S.tab]();$("app").innerHTML=v;
+$("nav").innerHTML=TABS.map(t=>`<button class="${S.tab===t[0]&&S.open===null?"on":""}" onclick="go('${t[0]}')"><i>${t[1]}</i>${t[2]}</button>`).join("")}
+render();
+</script></body></html>
